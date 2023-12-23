@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>AR.js Example</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/jeromeetienne/ar.js/2.3.0/aframe/build/aframe-ar.js"></script>
+    <script src="https://threejs.org/build/three.js"></script>
+  </head>
+  <body>
+    <a-scene embedded arjs="sourceType: webcam;">
+      <!-- Ajoute ici ton objet initial -->
+      <a-box position="0 0.5 0" material="color: red;"></a-box>
+
+      <!-- Ajoute un élément clickable (cursor) -->
+      <a-entity cursor="rayOrigin: mouse"></a-entity>
+
+      <a-marker preset="hiro">
+        <!-- Ajoute ici l'objet que tu veux afficher initialement -->
+        <a-box position="0 0.5 0" material="color: red;"></a-box>
+
+        <!-- Ajoute un composant 'click' pour changer l'objet -->
+        <a-entity
+          position="0 0 0"
+          geometry="primitive: plane; width: 2; height: 2"
+          material="color: transparent; opacity: 0.0"
+          click-handler
+        ></a-entity>
+      </a-marker>
+    </a-scene>
+
+    <script>
+      AFRAME.registerComponent("click-handler", {
+        init: function() {
+          this.el.addEventListener("click", this.changeObject.bind(this));
+        },
+
+        changeObject: function() {
+          // Change l'objet lors du clic
+          this.el.parentNode.removeChild(this.el);
+          var newObject = document.createElement("a-sphere");
+          newObject.setAttribute("position", "0 0.5 0");
+          newObject.setAttribute("material", "color: blue;");
+          this.el.parentNode.appendChild(newObject);
+        },
+      });
+    </script>
+  </body>
+</html>
